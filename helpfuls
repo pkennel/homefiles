@@ -1,0 +1,2 @@
+# mac os restart the video camera process to pick up an external camera
+sudo killall VDCAssistant
