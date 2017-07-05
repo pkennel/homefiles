@@ -6,14 +6,12 @@ fi
 
 update_terminal_cwd
 
-function gitbash() {
-  export PS1='\u@\h:\w$(__git_ps1 " (%s)") \$ '
-}
+if [ -f /usr/local/etc/bash_completion ]; then
+  source /usr/local/etc/bash_completion
+  GIT_PS1_SHOWDIRTYSTATE=true
+  export PS1='[\u@mbp \w$(__git_ps1)]\$ '
+fi
 
-function nogitbash() {
-  export PS1='\u@\h:\w \$ '
-}
-gitbash
 
 export CLICOLOR=1
 export EDITOR=vi
@@ -23,4 +21,6 @@ export HISTSIZE="INFINITE"
 shopt -s histappend
 PROMPT_COMMAND="history -a;$(echo $PROMPT_COMMAND | sed 's/update_terminal_cwd//')"
 
-source ~/.profile
+if [ -f ~/.profile ]; then
+  source ~/.profile
+fi
