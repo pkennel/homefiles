@@ -8,3 +8,4 @@ sudo killall VDCAssistant
 
 * [bash completion](https://github.com/bobthecow/git-flow-completion/wiki/Install-Bash-git-completion)
 * [itunes volume control](https://github.com/alberti42/iTunes-Volume-Control)
+* Skitch
