@@ -1,38 +1,39 @@
 set -o vi
-
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-  . $(brew --prefix)/etc/bash_completion
-fi
-
-update_terminal_cwd
-
-if [ -f /usr/local/etc/bash_completion ]; then
-  source /usr/local/etc/bash_completion
-  GIT_PS1_SHOWDIRTYSTATE=true
-  export PS1='[\u@mbp \w$(__git_ps1)]\$ '
-fi
-
-
 export CLICOLOR=1
 export EDITOR=vi
-# Eternal bash history.
-# ---------------------
-# Undocumented feature which sets the size to "unlimited".
-# http://stackoverflow.com/questions/9457233/unlimited-bash-history
+
+# PREVENT ACCIDENTAL LOGOUTS
+function exit() { for i in [1 2 3]; do echo "Ah ah ah! You didn't say the magic word!"; sleep 2; done;}
+export IGNOREEOF=42
+
+# BASH COMPLETION
+update_terminal_cwd
+
+if [[ -f "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+  . "/usr/local/etc/profile.d/bash_completion.sh"
+  GIT_PS1_SHOWDIRTYSTATE=true
+  export PS1='[\u@\h \w$(__git_ps1)]\$ '
+fi
+
+
+
+#INFINITE APPENDING HISTORY
 export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
-# Change the file location because certain bash sessions truncate .bash_history file upon close.
-# http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
+export HISTCONTROL=erasedups
 export HISTFILE=~/.bash_eternal_history
-# Force prompt to write history after every command.
-# http://superuser.com/questions/20900/bash-history-loss
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 shopt -s histappend
 PROMPT_COMMAND="history -a;$(echo $PROMPT_COMMAND | sed 's/update_terminal_cwd//')"
+
+# allow go get to get from git
+export GIT_TERMINAL_PROMPT=1
 
 if [ -f ~/.profile ]; then
   source ~/.profile
 fi
+
+### PYTHON
+eval "$(pyenv init -)"
 
 
